@@ -26,6 +26,11 @@ try {
   agents = agents.replace(/\{\{(?!daily_email_enabled_true_or_false|daily_email_recipient|daily_email_send_time_hh-mm)[a-z0-9_-]+\}\}/g, 'configured');
   fs.writeFileSync(agentsFile, agents, 'utf8');
 
+  const teamsIndex = path.join(target, 'teams', 'index.md');
+  let teams = fs.readFileSync(teamsIndex, 'utf8');
+  teams = teams.replace(/\{\{[a-z0-9_-]+\}\}/g, 'configured');
+  fs.writeFileSync(teamsIndex, teams, 'utf8');
+
   const manifestFile = path.join(target, 'harness', 'manifest.yml');
   let manifest = fs.readFileSync(manifestFile, 'utf8');
   manifest = manifest.replace('lifecycle: intake', 'lifecycle: baseline').replace('configuration_status: incomplete', 'configuration_status: ready').replace('last_preflight: YYYY-MM-DD', `last_preflight: ${today}`);

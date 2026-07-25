@@ -7,6 +7,7 @@ project-state/
   AGENTS.md
   context/       # Project-specific operating rules and WBS baseline
   harness/       # Lifecycle, requirements, notifications, questions, handoffs
+  teams/         # One Markdown context file per collaborating team
   raw/           # Immutable source evidence and source register
   processed/     # Confirmed structured facts extracted from evidence
   state/         # Agent judgment, uncertainty, risk, and readiness
@@ -92,6 +93,13 @@ Update it at the start and end of every state-changing conversation.
 `harness/notifications.yml` holds optional daily email eligibility. It is not a
 recurring job definition: a separate, explicitly approved automation is needed
 to schedule delivery.
+
+## Team Context
+
+`teams/index.md` is the visible cross-team directory. Each collaborating team
+gets a file at `teams/<stable-team-slug>.md` that records a contact, interface
+or deliverable, needed-by date, update cadence, status, and open questions.
+Keep the same dependency ID in the team file and `processed/dependencies.md`.
 
 ## Update Order
 

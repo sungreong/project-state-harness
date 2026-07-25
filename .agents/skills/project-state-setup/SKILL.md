@@ -30,8 +30,11 @@ Create the first usable project state without pretending the user already knows 
 7. Replace the active root's `AGENTS.md` configuration variables and populate
    `context/project.yml`, `context/operating-model.md`, and first
    `views/latest-brief.md` from the Q&A. Mark inferred content as `assumed`.
-8. Add a setup handoff and run the core strict check against the active root after setup.
-9. Ask about optional daily email only after the required baseline is ready. If
+8. Create or update `teams/index.md` from the collaborating-team answer. Route
+   detailed team information to `project-state-team-context` rather than
+   inventing contacts, deliverables, or update cadence.
+9. Add a setup handoff and run the core strict check against the active root after setup.
+10. Ask about optional daily email only after the required baseline is ready. If
    the user wants it, populate `harness/notifications.yml` but leave delivery
    disabled until recipient, timezone, send time, and explicit approval are set.
 

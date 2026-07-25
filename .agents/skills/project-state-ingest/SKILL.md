@@ -13,7 +13,7 @@ Turn incoming material into evidence and facts, not unsupported project conclusi
 2. Preserve the source and create one evidence note under the appropriate `raw/` folder.
 3. Extract explicit facts into `processed/`: facts, actions, decisions, issues, and dependencies. Link every extracted row to the evidence source ID.
 4. When a source changes a plan, keep the old plan as planned baseline and record the new statement as actual evidence; do not erase the difference.
-5. Send uncertain, conflicting, or incomplete items to `state/open-questions.md` or `state/risks.md`.
+5. Send uncertain, conflicting, or incomplete items to `state/open-questions.md` or `state/risks.md`. When a source changes another team's commitment, also update the corresponding file under `teams/` and `teams/index.md`.
 6. Add an ingest handoff with source IDs, changed files, and open question IDs. Finish by running the core structural check. Do not regenerate the brief; hand off to `project-state-check` then `project-state-brief`.
 
 ## Source Boundaries

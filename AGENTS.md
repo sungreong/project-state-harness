@@ -87,8 +87,18 @@ before relying on it.
 | Need | Skill | Suggested request |
 | --- | --- | --- |
 | First baseline after clone | `project-state-setup` | "이 프로젝트 상태 관리를 시작해줘. 현재 폴더를 직접 채워줘." |
+| Collaborating team or department context | `project-state-team-context` | "이 프로젝트의 협업 팀을 질문으로 정리하고 teams 폴더에 기록해줘." |
 | Meeting, WBS, update, XLSX, or PPTX | `project-state-ingest` | "이 자료를 근거로 반영하고 결정, 액션, 이슈, 의존성을 추출해줘." |
 | Milestone or delivery-date question | `project-state-schedule` | "이 날짜를 근거와 선행조건, 미확인 정보, 신뢰도로 평가해줘." |
 | Forgotten work or blocked flow | `project-state-check` | "현재 WBS 기준으로 놓친 일과 막힌 의존성을 점검해줘." |
 | Daily or weekly status | `project-state-brief` | "현재 상태를 짧은 brief와 wiki로 갱신해줘." |
 | Approved daily email or draft | `project-state-notify` | "오늘의 프로젝트 요약 메일 초안을 만들고, 발송 조건을 점검해줘." |
+
+## Team Context
+
+Use `teams/index.md` as the cross-team control surface. Keep one file per
+collaborating team in `teams/`, named with a stable lowercase slug such as
+`teams/data-platform.md`. A team file records its contact, expected deliverable,
+needed-by date, update cadence, current status, and open questions. When a
+meeting changes a team commitment, update that team file and the matching
+processed dependency; do not bury the change only in a meeting note.

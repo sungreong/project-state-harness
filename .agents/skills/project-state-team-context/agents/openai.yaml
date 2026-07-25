@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Team Context"
+  short_description: "Capture and maintain collaborating team context"
+  default_prompt: "Use $project-state-team-context to ask for and record the teams this project depends on."

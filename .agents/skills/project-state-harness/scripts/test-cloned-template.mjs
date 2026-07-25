@@ -22,6 +22,7 @@ try {
   for (const requiredFile of [
     'AGENTS.md',
     'context/project.yml',
+    'teams/index.md',
     'harness/manifest.yml',
     'harness/question-ledger.md',
     'harness/requirements-status.md',
@@ -30,6 +31,7 @@ try {
     'state/current-state.md',
     'views/latest-brief.md',
     '.agents/skills/project-state-setup/SKILL.md',
+    '.agents/skills/project-state-team-context/SKILL.md',
     '.agents/skills/project-state-notify/SKILL.md',
   ]) {
     if (!fs.existsSync(path.join(cloneDirectory, requiredFile))) {

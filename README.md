@@ -41,7 +41,7 @@ clone한 폴더는 비어 있지 않습니다. 이미 아래의 프로젝트 운
 
 ```text
 AGENTS.md, context/, harness/, raw/, processed/, state/, views/
-.agents/skills/ (setup, ingest, schedule, check, brief)
+.agents/skills/ (setup, team context, ingest, schedule, check, brief)
 ```
 
 ### GitHub Template을 쓰지 않는 경우
@@ -78,10 +78,26 @@ git push -u origin main
 - `context/operating-model.md`: 완료 기준, 승인 흐름, 팀별 운영 규칙
 - `harness/question-ledger.md`: 아직 답하지 못한 질문
 - `views/latest-brief.md`: 지금 읽을 현황 요약
+- `teams/index.md`: 협업 부서와 의존성을 한 번에 보는 팀 컨텍스트 목록
 
 초기 Q&A의 필수 설정값은 `AGENTS.md`의 **Project Configuration Template**에
 보입니다. 프로젝트 대표 일정의 성격과 날짜, 현재 WBS 단계와 종료 기준,
 협업 부서의 담당자·제공물·필요 시점, 완료·승인 책임자를 포함합니다.
+
+## 협업 부서 정보
+
+`teams/`는 회의록과 달리 **현재의 팀 인터페이스**를 바로 읽는 공간입니다.
+`teams/index.md`에는 모든 협업 부서를, `teams/<team>.md`에는 각 부서의
+담당자, 제공물, 필요 시점, 업데이트 주기, 의사결정, 위험, 열린 질문을 둡니다.
+
+```text
+이 프로젝트의 협업 팀을 하나씩 질문해서 정리해줘.
+teams 폴더에 팀별 문서를 만들고 의존성과 연결해줘.
+```
+
+`project-state-team-context` 스킬이 한 번에 세 가지 이하의 질문으로 팀
+정보를 채웁니다. 새 회의록에서 팀 약속이 바뀌면 ingest 스킬이 해당 팀 문서와
+의존성 기록을 함께 갱신합니다.
 
 ## 계속 점검되는 필수값
 
@@ -165,6 +181,7 @@ Git에는 판단과 근거를 재현할 수 있는 Markdown 기록을 넣습니�
 
 ```text
 context/     프로젝트 기준선, WBS, 완료 및 승인 규칙
+teams/       협업 부서별 담당자, 제공물, 의존성, 업데이트 주기, 열린 질문
 harness/     라이프사이클, 질문 이력, 역할 handoff, 실행 로그
 raw/         추가만 하는 Markdown 근거 노트와 원본 참조
 processed/   근거에서 확인된 사실, 액션, 결정, 이슈, 의존성

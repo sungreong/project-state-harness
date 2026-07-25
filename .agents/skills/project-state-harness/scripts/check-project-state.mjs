@@ -17,6 +17,8 @@ const requiredFiles = [
   'AGENTS.md',
   'context/project.yml',
   'context/operating-model.md',
+  'teams/index.md',
+  'teams/_team-template.md',
   'harness/manifest.yml',
   'harness/question-ledger.md',
   'harness/handoffs.md',
@@ -92,6 +94,11 @@ if (lifecycle && lifecycle !== 'intake') {
       '{{daily_email_send_time_hh-mm}}',
     ].includes(placeholder));
     if (requiredPlaceholders.length) errors.push(`Unresolved configuration variables in ${file}: ${[...new Set(requiredPlaceholders)].join(', ')}`);
+  }
+  const teamsIndex = path.join(root, 'teams', 'index.md');
+  if (fs.existsSync(teamsIndex)) {
+    const teamPlaceholders = fs.readFileSync(teamsIndex, 'utf8').match(/\{\{[a-z0-9_-]+\}\}/g) ?? [];
+    if (teamPlaceholders.length) errors.push(`Unresolved team context variables in teams/index.md: ${[...new Set(teamPlaceholders)].join(', ')}`);
   }
   if (configurationStatus !== 'ready') errors.push('Baseline lifecycle requires configuration_status: ready.');
 }

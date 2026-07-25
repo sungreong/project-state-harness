@@ -20,7 +20,8 @@ Maintain a personal project operating record. Treat Markdown as the durable, hum
    `node scripts/check-project-state.mjs --root <project-state-path>` before
    routing. If required configuration is incomplete or stale, record the gap,
    route setup or check, and ask at most three questions before continuing.
-6. Route one focused task: setup, ingest, schedule, check, brief, or notify.
+6. Route one focused task: setup, team context, ingest, schedule, check, brief,
+   or notify.
    Run roles sequentially when they touch the same state.
 7. Require each role to record its input, changed files, open questions, and next role in `harness/handoffs.md`.
 8. Reconcile WBS, milestones, issues, decisions, and dependencies. Update `state/` before regenerating `views/`.
@@ -35,6 +36,7 @@ Read `references/schema.md` before creating or changing project-state files. Rea
 | User need | Invoke | Primary writes |
 | --- | --- | --- |
 | Starting with partial information | `project-state-setup` | `context/`, `harness/question-ledger.md` |
+| Capturing or updating another team's interface | `project-state-team-context` | `teams/`, dependencies, questions |
 | Adding a meeting, update, Markdown, XLSX, or PPTX | `project-state-ingest` | `raw/`, `processed/` |
 | Asking about a date, sequence, or whether a deadline is safe | `project-state-schedule` | `state/schedule-assessment.md` |
 | Asking what is missing, blocked, or forgotten | `project-state-check` | `state/`, `harness/question-ledger.md` |
@@ -111,6 +113,7 @@ For a meeting or status update:
 - `scripts/check-schedule-assessment.mjs`: schedule-answer safety check.
 - `harness/requirements-status.md`: visible baseline and freshness gate.
 - `harness/notifications.yml`: opt-in daily email eligibility settings.
+- `teams/index.md`: cross-team directory and dependency control surface.
 - `scripts/bootstrap-project-state.mjs`: safe template bootstrapper for an
   explicitly requested new folder, not for a cloned template root.
 - `assets/project-state-template/`: copyable personal project-state starter.
