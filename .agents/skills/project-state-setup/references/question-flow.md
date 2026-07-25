@@ -1,5 +1,12 @@
 # Setup Question Flow
 
+## Cloned Template Scenario
+
+The cloned repository is not empty. It already contains the project-state
+schema, `AGENTS.md`, focused skills, empty evidence tables, and `TBD` baseline
+values. Treat its root as the active project state. Fill it in place after the
+first-round answers; do not create another project-state folder below it.
+
 ## First Round: Establish a Working Baseline
 
 Ask only these three questions unless the user already supplied the answer:

@@ -34,6 +34,15 @@ git clone <새-프로젝트-저장소-URL>
 cd <새-프로젝트-폴더>
 ```
 
+clone한 폴더는 비어 있지 않습니다. 이미 아래의 프로젝트 운영 골격과 Codex
+스킬이 들어 있습니다. 다만 프로젝트 이름, WBS, 팀, 일정 같은 실제 값만
+`TBD` 또는 빈 표로 남아 있습니다.
+
+```text
+AGENTS.md, context/, harness/, raw/, processed/, state/, views/
+.agents/skills/ (setup, ingest, schedule, check, brief)
+```
+
 ### GitHub Template을 쓰지 않는 경우
 
 템플릿을 새 폴더로 clone한 뒤, 프로젝트 전용 원격 저장소를 연결합니다. 실제
@@ -47,9 +56,13 @@ git remote add origin <새-프로젝트-저장소-URL>
 git push -u origin main
 ```
 
+이 명령도 템플릿 파일 전체를 `my-project-state`로 복제합니다. 이후 Codex는
+새 폴더를 만들지 않고, 현재 clone한 루트 안의 파일을 채웁니다.
+
 ## Clone 후 첫 대화
 
-새 프로젝트 폴더를 Codex로 열고 아래처럼 요청합니다.
+새 프로젝트 폴더를 Codex로 열고 아래처럼 요청합니다. `AGENTS.md`가 현재
+루트를 프로젝트 상태 폴더로 인식하므로 별도 설치나 폴더 생성은 필요 없습니다.
 
 ```text
 이 프로젝트 상태 관리를 시작해줘.
@@ -57,8 +70,8 @@ git push -u origin main
 모르는 정보는 unknown으로 남기고, 질문 이력에도 기록해줘.
 ```
 
-`project-state-setup` 스킬이 한 번에 최대 세 가지 질문을 하고, 답을 다음 파일에
-기록합니다.
+`project-state-setup` 스킬이 한 번에 최대 세 가지 질문을 하고, 현재 clone한
+루트의 다음 파일을 직접 갱신합니다.
 
 - `context/project.yml`: 프로젝트 목표와 WBS 기준선
 - `context/operating-model.md`: 완료 기준, 승인 흐름, 팀별 운영 규칙

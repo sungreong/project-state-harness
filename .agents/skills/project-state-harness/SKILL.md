@@ -9,7 +9,10 @@ Maintain a personal project operating record. Treat Markdown as the durable, hum
 
 ## Use This Workflow
 
-1. Locate the project-state root. For a new project, use `project-state-setup`; it creates a copy from `assets/project-state-template/` after a short Q&A.
+1. Locate the project-state root. A cloned template root already contains the
+   project-state files and must be initialized in place through
+   `project-state-setup`. Only when the user explicitly wants a new folder in a
+   blank parent should setup create a copy from `assets/project-state-template/`.
 2. Preserve the source in `raw/`; never overwrite user-provided `.xlsx`, `.pptx`, or source Markdown.
 3. Convert each source into an auditable Markdown evidence note under `raw/imports/`, `raw/meetings/`, or `raw/updates/`. Keep source ID, source path, captured time, and a precise sheet/range or slide reference.
 4. Update only confirmed facts in `processed/`. Put uncertain interpretation in `state/` and link it to its evidence.
@@ -29,6 +32,14 @@ Read `references/schema.md` before creating or changing project-state files. Rea
 | Asking about a date, sequence, or whether a deadline is safe | `project-state-schedule` | `state/schedule-assessment.md` |
 | Asking what is missing, blocked, or forgotten | `project-state-check` | `state/`, `harness/question-ledger.md` |
 | Asking for a current summary or wiki | `project-state-brief` | `views/` |
+
+## Cloned Template First Run
+
+When the current repository has `context/project.yml` values of `TBD` and an
+`intake` manifest, treat it as a fresh project, not an empty workspace. The
+template already supplies the schema, the raw note formats, the state files,
+and the focused skills. Ask the setup questions, then write the answers into
+the current repository. Do not create `project-state/` below the cloned root.
 
 Read `references/harness-protocol.md` before coordinating multiple roles. Read `references/case-comparison.md` when changing the architecture or adding another role.
 
@@ -80,5 +91,6 @@ For a meeting or status update:
 - `references/case-comparison.md`: case-derived architecture decisions.
 - `scripts/check-project-state.mjs`: structural preflight check.
 - `scripts/check-schedule-assessment.mjs`: schedule-answer safety check.
-- `scripts/bootstrap-project-state.mjs`: safe template bootstrapper used by setup.
+- `scripts/bootstrap-project-state.mjs`: safe template bootstrapper for an
+  explicitly requested new folder, not for a cloned template root.
 - `assets/project-state-template/`: copyable personal project-state starter.
