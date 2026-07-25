@@ -10,12 +10,15 @@ Find the smallest set of unanswered questions that prevents reliable project con
 ## Workflow
 
 1. Read `../project-state-harness/references/checks.md`, `references/question-routing.md`, and `harness/question-ledger.md`.
-2. Run the core strict structural check first. Repair missing evidence metadata before interpreting state.
+2. Run the core check first. Read required configuration and freshness results
+   before interpreting state. If the baseline is incomplete or stale, update
+   `harness/requirements-status.md`, record the question IDs, and do not
+   describe the project as ready or current.
 3. Compare planned WBS exit criteria with actual evidence, actions, issues, and dependencies.
 4. Classify each concern as `blocked`, `unknown`, `assumed`, stale, or `not-ready`; include evidence links.
 5. Rank at most three questions by consequence and urgency. Add them to the question ledger before asking the user; do not dump every possible gap.
 6. After answers arrive, update only the affected context, processed records, and state files. Preserve the previous uncertainty as resolved history where useful.
-7. Add a check handoff and route schedule questions to `project-state-schedule` rather than giving an unsupported date answer.
+7. Add a check handoff and route schedule questions to `project-state-schedule` only after its required configuration is ready; otherwise ask the missing baseline questions first.
 
 ## Output
 

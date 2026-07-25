@@ -35,9 +35,9 @@ const replacements = [
   ['project_owner', valueFor('--owner')],
 ];
 for (const [key, value] of replacements) {
-  if (value) project = project.replace(`${key}: TBD`, `${key}: ${JSON.stringify(value)}`);
+  if (value) project = project.replace(`${key}: "{{${key}}}"`, `${key}: ${JSON.stringify(value)}`);
 }
-project = project.replace('last_updated: YYYY-MM-DD', `last_updated: ${new Date().toISOString().slice(0, 10)}`);
+project = project.replace('last_updated: "{{last_updated_yyyy-mm-dd}}"', `last_updated: ${JSON.stringify(new Date().toISOString().slice(0, 10))}`);
 fs.writeFileSync(projectFile, project, 'utf8');
 
 console.log(`Created project state: ${absoluteTarget}`);

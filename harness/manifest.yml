@@ -1,7 +1,9 @@
 template_version: 2
 lifecycle: intake
 active_focus: establish-baseline
+configuration_status: incomplete
 last_completed_role: none
 last_updated: YYYY-MM-DD
+last_preflight: YYYY-MM-DD
 freshness_window_days: 7
 question_budget: 3

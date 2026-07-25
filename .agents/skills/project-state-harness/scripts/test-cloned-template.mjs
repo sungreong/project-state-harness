@@ -24,10 +24,13 @@ try {
     'context/project.yml',
     'harness/manifest.yml',
     'harness/question-ledger.md',
+    'harness/requirements-status.md',
+    'harness/notifications.yml',
     'raw/meetings/_template.md',
     'state/current-state.md',
     'views/latest-brief.md',
     '.agents/skills/project-state-setup/SKILL.md',
+    '.agents/skills/project-state-notify/SKILL.md',
   ]) {
     if (!fs.existsSync(path.join(cloneDirectory, requiredFile))) {
       throw new Error(`Clone missed ${requiredFile}`);
@@ -37,6 +40,14 @@ try {
   const setupSkill = fs.readFileSync(path.join(cloneDirectory, '.agents', 'skills', 'project-state-setup', 'SKILL.md'), 'utf8');
   if (!setupSkill.includes('Update it in place. Never create a child folder')) {
     throw new Error('Setup skill does not define cloned-template mode.');
+  }
+
+  const agentInstructions = fs.readFileSync(path.join(cloneDirectory, 'AGENTS.md'), 'utf8');
+  const projectConfig = fs.readFileSync(path.join(cloneDirectory, 'context', 'project.yml'), 'utf8');
+  for (const placeholder of ['{{project_name}}', '{{representative_schedule_date}}', '{{related_team_name}}', '{{approval_owner}}']) {
+    if (!agentInstructions.includes(placeholder) || !projectConfig.includes(placeholder)) {
+      throw new Error(`Clone is missing required configuration placeholder ${placeholder}.`);
+    }
   }
 
   run(process.execPath, [path.join(cloneDirectory, '.agents', 'skills', 'project-state-harness', 'scripts', 'check-project-state.mjs'), '--root', cloneDirectory, '--strict']);

@@ -6,7 +6,7 @@
 project-state/
   AGENTS.md
   context/       # Project-specific operating rules and WBS baseline
-  harness/       # Lifecycle, open questions, and role handoffs
+  harness/       # Lifecycle, requirements, notifications, questions, handoffs
   raw/           # Immutable source evidence and source register
   processed/     # Confirmed structured facts extracted from evidence
   state/         # Agent judgment, uncertainty, risk, and readiness
@@ -27,6 +27,24 @@ captured_at: YYYY-MM-DD
 ```
 
 For XLSX, add `sheet:` and `range:`. For PPTX, add `slides:`. Preserve the original file path under `source_ref`.
+
+## Required Project Baseline
+
+`context/project.yml` is the structured source of truth for the project
+baseline. Initial setup must fill, or explicitly mark as `unknown` or
+`not_applicable`, each of these:
+
+- `project_name`, `project_owner`, `project_goal`, and `status_as_of`.
+- Current WBS phase and the first WBS item's owner, target date, and exit criteria.
+- Representative schedule type (`external_commitment` or `internal_target`), date, and next milestone.
+- At least one related team or department with contact, expected deliverable, needed-by date, and status.
+- Definition of done, approval owner, and release owner when release applies.
+
+Replace the matching configuration variables in the root `AGENTS.md` at the
+same time. `intake` may contain template variables; any later lifecycle must
+not.
+
+Do not treat a schedule as a commitment when its type or date is `unknown`.
 
 ## Processed Records
 
@@ -67,6 +85,13 @@ Use `P0` only when the answer blocks a near-term decision or WBS transition. Use
 | --- | --- | --- | --- | --- | --- | --- |
 
 `harness/run-log.md` is append-only. Record trigger, time, selected role, and whether the run stopped for a user answer.
+
+`harness/requirements-status.md` is the visible baseline and freshness gate.
+Update it at the start and end of every state-changing conversation.
+
+`harness/notifications.yml` holds optional daily email eligibility. It is not a
+recurring job definition: a separate, explicitly approved automation is needed
+to schedule delivery.
 
 ## Update Order
 

@@ -1,0 +1,20 @@
+daily_email:
+  enabled: false
+  delivery_approval: pending
+  recipients:
+    - "{{daily_email_recipient}}"
+  timezone: "Asia/Seoul"
+  send_at: "{{daily_email_send_time_hh-mm}}"
+  cadence: daily
+  require_baseline: true
+  subject_prefix: "[Project State]"
+  include_sections:
+    - current_stage
+    - attention_today
+    - ready_work
+    - waiting_or_blocked
+    - open_questions
+
+Set `enabled: true` only after replacing the recipient and send time, obtaining
+explicit delivery approval, and confirming the strict project-state check
+passes. This file configures eligibility; it does not create a recurring job.

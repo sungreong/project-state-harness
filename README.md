@@ -36,7 +36,8 @@ cd <새-프로젝트-폴더>
 
 clone한 폴더는 비어 있지 않습니다. 이미 아래의 프로젝트 운영 골격과 Codex
 스킬이 들어 있습니다. 다만 프로젝트 이름, WBS, 팀, 일정 같은 실제 값만
-`TBD` 또는 빈 표로 남아 있습니다.
+`{{project_name}}` 같은 템플릿 변수 또는 빈 표로 남아 있습니다. 첫 대화에서
+모든 필수 변수는 값, `unknown`, 또는 `not_applicable` 중 하나로 바뀝니다.
 
 ```text
 AGENTS.md, context/, harness/, raw/, processed/, state/, views/
@@ -77,6 +78,49 @@ git push -u origin main
 - `context/operating-model.md`: 완료 기준, 승인 흐름, 팀별 운영 규칙
 - `harness/question-ledger.md`: 아직 답하지 못한 질문
 - `views/latest-brief.md`: 지금 읽을 현황 요약
+
+초기 Q&A의 필수 설정값은 `AGENTS.md`의 **Project Configuration Template**에
+보입니다. 프로젝트 대표 일정의 성격과 날짜, 현재 WBS 단계와 종료 기준,
+협업 부서의 담당자·제공물·필요 시점, 완료·승인 책임자를 포함합니다.
+
+## 계속 점검되는 필수값
+
+하네스는 첫 설정에서만 질문하지 않습니다. 대화를 시작하거나 회의록, WBS,
+일정, brief를 갱신할 때마다 `harness/requirements-status.md`와 프로젝트
+신선도를 점검합니다.
+
+- 필수값이 `{{...}}`, `unknown`, 또는 오래된 정보이면 질문 이력에 남기고
+  가장 영향이 큰 세 가지 질문만 다시 묻습니다.
+- 기준선이 준비되지 않으면 일정은 조건부 평가로만 남고, brief는
+  `provisional`로 표시합니다.
+- `status_as_of`, `last_updated`, `freshness_window_days`로 현재 상태가
+  오래됐는지 확인합니다.
+- 기준선이 완료되면 `configuration_status: ready`와 엄격 검증 통과가 필요합니다.
+
+## 선택 기능: Gmail 일일 요약
+
+기본값은 **미발송**입니다. `project-state-notify`는 먼저
+`views/daily-email-draft.md`에 초안만 만듭니다.
+
+실제 발송 또는 반복 발송을 켜려면 다음 값을 모두 채워야 합니다.
+
+1. 필수 프로젝트 기준선이 준비되어 엄격 검증을 통과해야 합니다.
+2. `harness/notifications.yml`에서 `enabled: true`로 설정합니다.
+3. 수신자 이메일, 시간대, `HH:MM` 발송 시각을 채웁니다.
+4. 사용자가 수신자와 주기를 확인한 뒤 `delivery_approval: approved`로
+   명시적으로 승인합니다.
+5. 실제 반복 자동화는 사용자가 “매일 발송 자동화를 만들어줘”라고 별도로
+   요청하고, 해당 환경에 승인된 자동화 기능이 있을 때만 생성합니다.
+
+```text
+오늘의 프로젝트 요약 메일 초안을 만들고 발송 조건을 점검해줘.
+```
+
+```text
+수신자와 발송 시각을 확인했어. Gmail로 오늘 메일을 발송해줘.
+```
+
+두 번째 요청은 즉시 발송 요청입니다. 자동 반복 발송 설정과는 별개입니다.
 
 ## 평소 사용하는 요청
 

@@ -1,22 +1,32 @@
-project_name: TBD
-project_goal: TBD
-project_owner: TBD
-last_updated: YYYY-MM-DD
+project_name: "{{project_name}}"
+project_goal: "{{project_goal}}"
+project_owner: "{{project_owner}}"
+status_as_of: "{{status_as_of_yyyy-mm-dd}}"
+current_wbs_phase: "{{current_wbs_phase}}"
+last_updated: "{{last_updated_yyyy-mm-dd}}"
 freshness_window_days: 7
 
+representative_schedule:
+  type: "{{external_commitment_or_internal_target}}"
+  date: "{{representative_schedule_date}}"
+  next_milestone: "{{next_milestone_name}}"
+  exit_criteria: "{{next_milestone_exit_criteria}}"
+
+related_teams:
+  - team: "{{related_team_name}}"
+    contact: "{{team_contact}}"
+    expected_deliverable: "{{team_deliverable}}"
+    needed_by: "{{dependency_needed_by_date}}"
+    status: "{{confirmed_planned_or_unknown}}"
+
+governance:
+  definition_of_done: "{{definition_of_done}}"
+  approval_owner: "{{approval_owner}}"
+  release_owner: "{{release_owner_or_not_applicable}}"
+
 wbs:
-  - id: WBS-01
-    name: Discovery
-    exit_criteria: TBD
-    owner: TBD
-    target_date: YYYY-MM-DD
-  - id: WBS-02
-    name: Design
-    exit_criteria: TBD
-    owner: TBD
-    target_date: YYYY-MM-DD
-  - id: WBS-03
-    name: Development
-    exit_criteria: TBD
-    owner: TBD
-    target_date: YYYY-MM-DD
+  - id: "{{first_wbs_id}}"
+    name: "{{first_wbs_name}}"
+    exit_criteria: "{{first_wbs_exit_criteria}}"
+    owner: "{{first_wbs_owner}}"
+    target_date: "{{first_wbs_target_date}}"

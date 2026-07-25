@@ -14,6 +14,11 @@ try {
   const bootstrap = spawnSync(process.execPath, [path.join(scriptDirectory, 'bootstrap-project-state.mjs'), '--target', target, '--project-name', 'Scenario Test', '--goal', 'Verify bootstrap', '--owner', 'Test User'], { encoding: 'utf8' });
   if (bootstrap.status !== 0) throw new Error(bootstrap.stderr || bootstrap.stdout);
 
+  const projectConfig = fs.readFileSync(path.join(target, 'context', 'project.yml'), 'utf8');
+  for (const expectedValue of ['project_name: "Scenario Test"', 'project_goal: "Verify bootstrap"', 'project_owner: "Test User"']) {
+    if (!projectConfig.includes(expectedValue)) throw new Error(`Bootstrap did not set ${expectedValue}`);
+  }
+
   for (const requiredFile of ['harness/manifest.yml', 'harness/question-ledger.md', 'harness/handoffs.md', 'harness/run-log.md', 'state/schedule-assessment.md']) {
     if (!fs.existsSync(path.join(target, requiredFile))) throw new Error(`Bootstrap missed ${requiredFile}`);
   }
@@ -23,6 +28,12 @@ try {
 
   const check = spawnSync(process.execPath, [path.join(scriptDirectory, 'check-project-state.mjs'), '--root', target, '--strict'], { encoding: 'utf8' });
   if (check.status !== 0) throw new Error(check.stderr || check.stdout);
+
+  const manifest = path.join(target, 'harness', 'manifest.yml');
+  fs.writeFileSync(manifest, fs.readFileSync(manifest, 'utf8').replace('lifecycle: intake', 'lifecycle: baseline'), 'utf8');
+  const unresolvedConfig = spawnSync(process.execPath, [path.join(scriptDirectory, 'check-project-state.mjs'), '--root', target, '--strict'], { encoding: 'utf8' });
+  if (unresolvedConfig.status === 0) throw new Error('Baseline with unresolved configuration unexpectedly passed strict check.');
+  fs.writeFileSync(manifest, fs.readFileSync(manifest, 'utf8').replace('lifecycle: baseline', 'lifecycle: intake'), 'utf8');
 
   const invalidEvidence = path.join(target, 'raw', 'updates', 'invalid.md');
   fs.writeFileSync(invalidEvidence, '# Missing evidence metadata\n', 'utf8');

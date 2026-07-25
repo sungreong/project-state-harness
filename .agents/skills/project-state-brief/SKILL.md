@@ -10,7 +10,10 @@ Translate the project state into a readable control surface without creating new
 ## Workflow
 
 1. Read `references/brief-shapes.md` and the core schema at `../project-state-harness/references/schema.md`.
-2. Confirm `project-state-check` has addressed the highest-priority gaps. If an open P0 question remains in `harness/question-ledger.md`, label the brief as provisional and link the question.
+2. Confirm `project-state-check` has addressed the highest-priority gaps and
+   inspect `harness/requirements-status.md`. If required configuration is
+   incomplete, stale, or has an open P0 question, label the brief as provisional
+   and link the question. Do not call it a current status.
 3. Regenerate `views/latest-brief.md` from `context/`, `processed/`, and `state/`.
 4. Regenerate `views/wiki.md` as a stable navigation view: goal, WBS, team interfaces, decisions, risks, and current state.
 5. Include source IDs for claims that could change a decision. Never promote an assumption to a fact while summarizing.

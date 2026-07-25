@@ -3,7 +3,8 @@
 ## Cloned Template Scenario
 
 The cloned repository is not empty. It already contains the project-state
-schema, `AGENTS.md`, focused skills, empty evidence tables, and `TBD` baseline
+schema, `AGENTS.md`, focused skills, empty evidence tables, and `{{...}}`
+baseline
 values. Treat its root as the active project state. Fill it in place after the
 first-round answers; do not create another project-state folder below it.
 
@@ -11,9 +12,13 @@ first-round answers; do not create another project-state folder below it.
 
 Ask only these three questions unless the user already supplied the answer:
 
-1. What outcome does this project need to deliver, and by when?
-2. What WBS stages, milestone list, or immediate next milestone already exists?
-3. Which people or teams must provide something before the next stage can finish?
+1. What is the representative project name, and who owns the project when work stops moving?
+2. What outcome must this project deliver, is the representative date an external commitment or internal target, and what is that date?
+3. What is the current WBS phase and next milestone, and which team or department must provide something before it can finish?
+
+Record the status-as-of date, next milestone exit criteria, related-team contact,
+expected deliverable, needed-by date, and approval owner whenever known. Use
+`unknown` or `not_applicable` instead of leaving a template variable behind.
 
 ## Second Round: Establish the Local Operating Model
 

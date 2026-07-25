@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Notify"
+  short_description: "Prepare or send approved project status emails"
+  default_prompt: "Use $project-state-notify to prepare today's project status email without sending it yet."

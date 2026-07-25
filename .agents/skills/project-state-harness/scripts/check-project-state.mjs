@@ -21,6 +21,9 @@ const requiredFiles = [
   'harness/question-ledger.md',
   'harness/handoffs.md',
   'harness/run-log.md',
+  'harness/requirements-status.md',
+  'harness/notifications.yml',
+  'harness/notification-log.md',
   'processed/facts.md',
   'processed/actions.md',
   'processed/decisions.md',
@@ -33,12 +36,17 @@ const requiredFiles = [
   'state/schedule-assessment.md',
   'views/latest-brief.md',
   'views/wiki.md',
+  'views/daily-email-draft.md',
 ];
 
 const rawDirectories = ['raw/meetings', 'raw/updates', 'raw/imports'];
 const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));
 const errors = [];
 const warnings = [];
+const manifestFile = path.join(root, 'harness', 'manifest.yml');
+const manifest = fs.existsSync(manifestFile) ? fs.readFileSync(manifestFile, 'utf8') : '';
+const lifecycle = manifest.match(/^lifecycle:\s*(\S+)\s*$/m)?.[1];
+const configurationStatus = manifest.match(/^configuration_status:\s*(\S+)\s*$/m)?.[1];
 
 const requiredContent = [
   ['harness/manifest.yml', 'lifecycle:'],
@@ -50,6 +58,74 @@ for (const [file, marker] of requiredContent) {
   const absoluteFile = path.join(root, file);
   if (fs.existsSync(absoluteFile) && !fs.readFileSync(absoluteFile, 'utf8').includes(marker)) {
     errors.push(`Required structure is missing in ${file}: ${marker}`);
+  }
+}
+
+const scalarValue = (content, key) => {
+  const match = content.match(new RegExp(`^\\s*(?:-\\s*)?${key}:\\s*(?:"([^"]*)"|([^#\\n]*))\\s*$`, 'm'));
+  return match ? (match[1] ?? match[2]).trim() : null;
+};
+const unresolved = (value) => !value || value === 'unknown' || value.includes('{{');
+const projectFile = path.join(root, 'context', 'project.yml');
+const project = fs.existsSync(projectFile) ? fs.readFileSync(projectFile, 'utf8') : '';
+
+if (!lifecycle) {
+  errors.push('Harness manifest is missing lifecycle.');
+}
+
+if (lifecycle && lifecycle !== 'intake') {
+  const requiredConfig = [
+    'project_name', 'project_goal', 'project_owner', 'status_as_of', 'current_wbs_phase',
+    'type', 'date', 'next_milestone', 'exit_criteria', 'team', 'contact',
+    'expected_deliverable', 'needed_by', 'definition_of_done', 'approval_owner',
+  ];
+  const unresolvedConfig = requiredConfig.filter((key) => unresolved(scalarValue(project, key)));
+  if (unresolvedConfig.length) errors.push(`Required project configuration is incomplete: ${unresolvedConfig.join(', ')}`);
+
+  for (const file of ['AGENTS.md', 'context/project.yml']) {
+    const absoluteFile = path.join(root, file);
+    if (!fs.existsSync(absoluteFile)) continue;
+    const placeholders = fs.readFileSync(absoluteFile, 'utf8').match(/\{\{[a-z0-9_-]+\}\}/g) ?? [];
+    const requiredPlaceholders = placeholders.filter((placeholder) => ![
+      '{{daily_email_enabled_true_or_false}}',
+      '{{daily_email_recipient}}',
+      '{{daily_email_send_time_hh-mm}}',
+    ].includes(placeholder));
+    if (requiredPlaceholders.length) errors.push(`Unresolved configuration variables in ${file}: ${[...new Set(requiredPlaceholders)].join(', ')}`);
+  }
+  if (configurationStatus !== 'ready') errors.push('Baseline lifecycle requires configuration_status: ready.');
+}
+
+if (lifecycle && lifecycle !== 'intake') {
+  const freshnessWindow = Number.parseInt(manifest.match(/^freshness_window_days:\s*(\d+)\s*$/m)?.[1] ?? '', 10);
+  const statusAsOf = scalarValue(project, 'status_as_of');
+  const lastUpdated = scalarValue(project, 'last_updated');
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  for (const [label, value] of [['status_as_of', statusAsOf], ['last_updated', lastUpdated]]) {
+    if (!datePattern.test(value ?? '')) {
+      errors.push(`Required freshness date is invalid: ${label}`);
+      continue;
+    }
+    if (Number.isFinite(freshnessWindow)) {
+      const ageDays = Math.floor((Date.now() - Date.parse(`${value}T00:00:00Z`)) / 86_400_000);
+      if (ageDays > freshnessWindow) warnings.push(`State is stale: ${label} is ${ageDays} days old (window: ${freshnessWindow}).`);
+    }
+  }
+}
+
+const notificationsFile = path.join(root, 'harness', 'notifications.yml');
+if (fs.existsSync(notificationsFile)) {
+  const notifications = fs.readFileSync(notificationsFile, 'utf8');
+  if (/^\s*enabled:\s*true\s*$/m.test(notifications)) {
+    const recipient = notifications.match(/^\s*-\s*"?([^"\n]+)"?\s*$/m)?.[1]?.trim();
+    const timezone = scalarValue(notifications, 'timezone');
+    const sendAt = scalarValue(notifications, 'send_at');
+    const approval = scalarValue(notifications, 'delivery_approval');
+    if (unresolved(recipient) || !recipient.includes('@')) errors.push('Daily email is enabled without a valid recipient.');
+    if (unresolved(timezone)) errors.push('Daily email is enabled without a timezone.');
+    if (unresolved(sendAt) || !/^\d{2}:\d{2}$/.test(sendAt)) errors.push('Daily email is enabled without a HH:MM send time.');
+    if (approval !== 'approved') errors.push('Daily email is enabled without delivery_approval: approved.');
+    if (configurationStatus !== 'ready') errors.push('Daily email is enabled before the project baseline is ready.');
   }
 }
 

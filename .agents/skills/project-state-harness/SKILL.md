@@ -16,10 +16,17 @@ Maintain a personal project operating record. Treat Markdown as the durable, hum
 2. Preserve the source in `raw/`; never overwrite user-provided `.xlsx`, `.pptx`, or source Markdown.
 3. Convert each source into an auditable Markdown evidence note under `raw/imports/`, `raw/meetings/`, or `raw/updates/`. Keep source ID, source path, captured time, and a precise sheet/range or slide reference.
 4. Update only confirmed facts in `processed/`. Put uncertain interpretation in `state/` and link it to its evidence.
-5. Read `harness/manifest.yml`, then route one focused task: setup, ingest, schedule, check, or brief. Run roles sequentially when they touch the same state.
-6. Require each role to record its input, changed files, open questions, and next role in `harness/handoffs.md`.
-7. Reconcile WBS, milestones, issues, decisions, and dependencies. Update `state/` before regenerating `views/`.
-8. Run `node scripts/check-project-state.mjs --root <project-state-path> --strict` before handing off.
+5. Read `harness/manifest.yml`, `harness/requirements-status.md`, and run
+   `node scripts/check-project-state.mjs --root <project-state-path>` before
+   routing. If required configuration is incomplete or stale, record the gap,
+   route setup or check, and ask at most three questions before continuing.
+6. Route one focused task: setup, ingest, schedule, check, brief, or notify.
+   Run roles sequentially when they touch the same state.
+7. Require each role to record its input, changed files, open questions, and next role in `harness/handoffs.md`.
+8. Reconcile WBS, milestones, issues, decisions, and dependencies. Update `state/` before regenerating `views/`.
+9. Update requirement status and `last_preflight`, then run
+   `node scripts/check-project-state.mjs --root <project-state-path> --strict`
+   before handing off whenever lifecycle is beyond `intake`.
 
 Read `references/schema.md` before creating or changing project-state files. Read `references/checks.md` before assessing missed work, risk, or readiness.
 
@@ -32,13 +39,15 @@ Read `references/schema.md` before creating or changing project-state files. Rea
 | Asking about a date, sequence, or whether a deadline is safe | `project-state-schedule` | `state/schedule-assessment.md` |
 | Asking what is missing, blocked, or forgotten | `project-state-check` | `state/`, `harness/question-ledger.md` |
 | Asking for a current summary or wiki | `project-state-brief` | `views/` |
+| Preparing or sending an approved status email | `project-state-notify` | `views/daily-email-draft.md`, notification log |
 
 ## Cloned Template First Run
 
-When the current repository has `context/project.yml` values of `TBD` and an
-`intake` manifest, treat it as a fresh project, not an empty workspace. The
-template already supplies the schema, the raw note formats, the state files,
-and the focused skills. Ask the setup questions, then write the answers into
+When the current repository has `context/project.yml` values such as
+`{{project_name}}` and an `intake` manifest, treat it as a fresh project, not
+an empty workspace. The template already supplies the schema, the raw note
+formats, the state files, and the focused skills. Ask the setup questions, then
+replace the configuration variables in `AGENTS.md` and write the answers into
 the current repository. Do not create `project-state/` below the cloned root.
 
 Read `references/harness-protocol.md` before coordinating multiple roles. Read `references/case-comparison.md` when changing the architecture or adding another role.
@@ -49,6 +58,15 @@ Read `references/harness-protocol.md` before coordinating multiple roles. Read `
 - Do not let one role overwrite another role's conclusion. Pass source IDs, state labels, and unresolved question IDs through a handoff instead.
 - A role may recommend a calendar, tracker, owner, or schedule change. Only the user may approve an external change.
 - Keep the lifecycle explicit: `intake`, `baseline`, `evidence`, `reconcile`, `awaiting-user`, or `monitoring`.
+- Treat `configuration_status: ready` as a gate, not a label. Do not mark it
+  ready while required configuration is missing, `unknown`, stale, or still a
+  template variable.
+- Check requirement status at every conversation entry, source update, schedule
+  assessment, brief regeneration, and notification run. Preserve unanswered
+  questions until evidence resolves them.
+- Do not send email by default. `harness/notifications.yml` may enable delivery
+  only after baseline readiness, recipient, timezone, send time, and explicit
+  delivery approval are present.
 
 ## Source Intake
 
@@ -91,6 +109,8 @@ For a meeting or status update:
 - `references/case-comparison.md`: case-derived architecture decisions.
 - `scripts/check-project-state.mjs`: structural preflight check.
 - `scripts/check-schedule-assessment.mjs`: schedule-answer safety check.
+- `harness/requirements-status.md`: visible baseline and freshness gate.
+- `harness/notifications.yml`: opt-in daily email eligibility settings.
 - `scripts/bootstrap-project-state.mjs`: safe template bootstrapper for an
   explicitly requested new folder, not for a cloned template root.
 - `assets/project-state-template/`: copyable personal project-state starter.
