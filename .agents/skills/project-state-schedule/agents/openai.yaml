@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Schedule"
+  short_description: "Assess schedule questions with explicit caveats"
+  default_prompt: "Use $project-state-schedule to assess this project date and list the assumptions and risks."

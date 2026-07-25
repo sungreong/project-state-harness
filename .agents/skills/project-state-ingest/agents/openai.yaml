@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Ingest"
+  short_description: "Turn project sources into traceable state"
+  default_prompt: "Use $project-state-ingest to process these project notes and update the state records."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Brief"
+  short_description: "Refresh a concise project brief and wiki"
+  default_prompt: "Use $project-state-brief to regenerate my latest project brief and wiki."

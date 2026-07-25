@@ -1,0 +1,84 @@
+---
+name: project-state-harness
+description: Maintain a personal project's live state from WBS, meeting notes, team updates, Markdown, XLSX, and PPTX sources. Use when Codex needs to initialize or update a lightweight project-state folder, identify missed actions, blockers, missing context, dependencies, or development readiness, and regenerate Markdown briefs and wiki views.
+---
+
+# Project State Harness
+
+Maintain a personal project operating record. Treat Markdown as the durable, human-readable system of record; treat source files as evidence. Act as the coordinator for the focused project-state skills, not as an unrestricted group chat among agents.
+
+## Use This Workflow
+
+1. Locate the project-state root. For a new project, use `project-state-setup`; it creates a copy from `assets/project-state-template/` after a short Q&A.
+2. Preserve the source in `raw/`; never overwrite user-provided `.xlsx`, `.pptx`, or source Markdown.
+3. Convert each source into an auditable Markdown evidence note under `raw/imports/`, `raw/meetings/`, or `raw/updates/`. Keep source ID, source path, captured time, and a precise sheet/range or slide reference.
+4. Update only confirmed facts in `processed/`. Put uncertain interpretation in `state/` and link it to its evidence.
+5. Read `harness/manifest.yml`, then route one focused task: setup, ingest, schedule, check, or brief. Run roles sequentially when they touch the same state.
+6. Require each role to record its input, changed files, open questions, and next role in `harness/handoffs.md`.
+7. Reconcile WBS, milestones, issues, decisions, and dependencies. Update `state/` before regenerating `views/`.
+8. Run `node scripts/check-project-state.mjs --root <project-state-path> --strict` before handing off.
+
+Read `references/schema.md` before creating or changing project-state files. Read `references/checks.md` before assessing missed work, risk, or readiness.
+
+## Routing
+
+| User need | Invoke | Primary writes |
+| --- | --- | --- |
+| Starting with partial information | `project-state-setup` | `context/`, `harness/question-ledger.md` |
+| Adding a meeting, update, Markdown, XLSX, or PPTX | `project-state-ingest` | `raw/`, `processed/` |
+| Asking about a date, sequence, or whether a deadline is safe | `project-state-schedule` | `state/schedule-assessment.md` |
+| Asking what is missing, blocked, or forgotten | `project-state-check` | `state/`, `harness/question-ledger.md` |
+| Asking for a current summary or wiki | `project-state-brief` | `views/` |
+
+Read `references/harness-protocol.md` before coordinating multiple roles. Read `references/case-comparison.md` when changing the architecture or adding another role.
+
+## Coordination Rules
+
+- The coordinator is the only role that asks the user questions during a multi-role run. It asks at most three, records them in the question ledger, and resumes after answers arrive.
+- Do not let one role overwrite another role's conclusion. Pass source IDs, state labels, and unresolved question IDs through a handoff instead.
+- A role may recommend a calendar, tracker, owner, or schedule change. Only the user may approve an external change.
+- Keep the lifecycle explicit: `intake`, `baseline`, `evidence`, `reconcile`, `awaiting-user`, or `monitoring`.
+
+## Source Intake
+
+### Markdown
+
+Copy or link the user-provided note into `raw/`. Add frontmatter with `source_id`, `source_type`, `source_ref`, and `captured_at`. Extract only explicit facts into `processed/`.
+
+### XLSX, XLS, CSV, TSV
+
+Use the `spreadsheets:Spreadsheets` skill in read-only mode to inspect relevant sheets, tables, formulas, and displayed values. Do not alter the source workbook unless the user separately asks for a workbook edit. Write an evidence note that includes the workbook path, sheet name, range/table name, as-of date, and the rows or figures used.
+
+### PPTX or Google Slides
+
+Use the `presentations:Presentations` skill to inspect the deck or relevant slides. Preserve the source deck. Write an evidence note with deck path, slide number, visible claim/decision, and any caveat that depends on speaker notes or visuals.
+
+## State Rules
+
+- Keep `raw/` append-only except for user-authorized corrections.
+- Keep `processed/` factual: state the source and avoid unsupported completion claims.
+- Put assumptions, risk assessments, stale signals, and unanswered questions in `state/`.
+- Generate `views/` from the other layers. Never let a wiki summary be the only record of a decision.
+- Use `planned`, `actual`, `blocked`, `unknown`, and `assumed` explicitly. Do not silently turn `unknown` into `done`.
+- Propose external changes such as calendar edits, owner changes, or tracker updates; require the user's approval before applying them.
+
+## Minimum Update Loop
+
+For a meeting or status update:
+
+1. Add the raw evidence note.
+2. Extract decisions, actions, issues, dependencies, and facts.
+3. Compare the evidence against the WBS stage exit criteria.
+4. Update open questions, risks, and development readiness.
+5. Rewrite `views/latest-brief.md` with current stage, three attention items, ready work, and evidence links.
+
+## Resources
+
+- `references/schema.md`: folder contract and Markdown schemas.
+- `references/checks.md`: deterministic and judgment-based checks.
+- `references/harness-protocol.md`: lifecycle, handoff, and role contracts.
+- `references/case-comparison.md`: case-derived architecture decisions.
+- `scripts/check-project-state.mjs`: structural preflight check.
+- `scripts/check-schedule-assessment.mjs`: schedule-answer safety check.
+- `scripts/bootstrap-project-state.mjs`: safe template bootstrapper used by setup.
+- `assets/project-state-template/`: copyable personal project-state starter.

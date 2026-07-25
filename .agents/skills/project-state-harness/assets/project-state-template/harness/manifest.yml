@@ -1,0 +1,7 @@
+template_version: 2
+lifecycle: intake
+active_focus: establish-baseline
+last_completed_role: none
+last_updated: YYYY-MM-DD
+freshness_window_days: 7
+question_budget: 3

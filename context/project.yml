@@ -1,0 +1,22 @@
+project_name: TBD
+project_goal: TBD
+project_owner: TBD
+last_updated: YYYY-MM-DD
+freshness_window_days: 7
+
+wbs:
+  - id: WBS-01
+    name: Discovery
+    exit_criteria: TBD
+    owner: TBD
+    target_date: YYYY-MM-DD
+  - id: WBS-02
+    name: Design
+    exit_criteria: TBD
+    owner: TBD
+    target_date: YYYY-MM-DD
+  - id: WBS-03
+    name: Development
+    exit_criteria: TBD
+    owner: TBD
+    target_date: YYYY-MM-DD

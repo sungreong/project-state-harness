@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Setup"
+  short_description: "Set up project context through Q and A"
+  default_prompt: "Use $project-state-setup to create my project-state folder through a guided interview."

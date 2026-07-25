@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Check"
+  short_description: "Find project gaps and ask focused questions"
+  default_prompt: "Use $project-state-check to find what I may be missing in this project state."

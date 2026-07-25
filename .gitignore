@@ -1,0 +1,34 @@
+# Operating-system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local secrets and editor state
+.env
+.env.*
+!.env.example
+.vscode/
+
+# Office temporary files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Source originals stay in an approved document store by default.
+# Keep an auditable Markdown evidence note in raw/ instead.
+raw/originals/
+raw/private/
+*.xlsx
+*.xls
+*.csv
+*.tsv
+*.pptx
+*.ppt
+*.pdf
+*.docx
+*.doc
+*.mp3
+*.m4a
+*.wav
+*.mp4
+*.mov

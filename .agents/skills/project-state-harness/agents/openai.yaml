@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project State Harness"
+  short_description: "Keep a personal project state current"
+  default_prompt: "Use $project-state-harness to update this project state from the available sources."
